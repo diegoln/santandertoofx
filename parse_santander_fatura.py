@@ -2,21 +2,17 @@
 
 import re
 
-transaction_pattern = re.compile("(\s*(\d{2}\/\d{2})\s+([\w\*-]+\s?)+\s+(PARC\s+(\d{2}\/\d{2}))?\s+([\d,\-\.]+))")
+transaction_pattern = re.compile("(\s*(\d{2}\/\d{2})\s+([\w\s\*-]+)\s+(PARC\s+(\d{2}\/\d{2}))?\s+([\d,\-\.]+))")
 installment_pattern = re.compile("(\d{2})\/\d{2}")
 
 fatura_txt = open("fatura.txt", "r")
 
-#TODO: match multiple occurrences in the same line
-
 line = fatura_txt.readline()
 while line:
-    match = transaction_pattern.search(line)
-    if (bool(match)):
+    for match in transaction_pattern.finditer(line):
         print "---"
         print line
         print "============"
-        print match.group(0)
         transaction_date = match.group(2)
         transaction_payee = match.group(3)
         transaction_value = match.group(6)
